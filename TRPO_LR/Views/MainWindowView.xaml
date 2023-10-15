@@ -1,0 +1,337 @@
+﻿<Window x:Class="TRPO_LR.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewModels="clr-namespace:TRPO_LR.ViewModels"
+        xmlns:s="https://github.com/canton7/Stylet"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="800"
+        Width="400"
+        Background="AliceBlue">
+    <Window.Resources>
+        <Style
+            TargetType="RadioButton">
+            <Setter
+                Property="Margin"
+                Value="0 5" />
+            <Setter
+                Property="FontSize"
+                Value="21" />
+        </Style>
+        <Storyboard x:Key="PayBill">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(Image.Opacity)"
+                Storyboard.TargetName="BillImage"
+                From="0"
+                To="1"
+                Duration="0:0:0.001" />
+            <DoubleAnimation
+                Storyboard.TargetProperty="RenderTransform.Children[0].X"
+                Storyboard.TargetName="BillImageBorder"
+                From="0"
+                To="-100"
+                Duration="0:0:2.5" />
+        </Storyboard>
+        <Storyboard x:Key="PayMoney">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(Rectangle.Opacity)"
+                Storyboard.TargetName="MoneyRectangle"
+                From="0"
+                To="1"
+                Duration="0:0:0.001" />
+            <DoubleAnimation
+                Storyboard.TargetProperty="RenderTransform.Children[0].Y"
+                Storyboard.TargetName="MoneyRectangle"
+                From="20"
+                To="0"
+                Duration="0:0:2.5" />
+        </Storyboard>
+    </Window.Resources>
+    <b:Interaction.Triggers>
+        <b:DataTrigger Binding="{Binding StartBillAnimation, Mode=OneWay}">
+            <b:DataTrigger.Value>
+                <system:Boolean>True</system:Boolean>
+            </b:DataTrigger.Value>
+            <b:ControlStoryboardAction
+                Storyboard="{StaticResource PayBill}"
+                ControlStoryboardOption="Play" />
+        </b:DataTrigger>
+        <b:DataTrigger Binding="{Binding StartMoneyAnimation, Mode=OneWay}">
+            <b:DataTrigger.Value>
+                <system:Boolean>True</system:Boolean>
+            </b:DataTrigger.Value>
+            <b:ControlStoryboardAction
+                Storyboard="{StaticResource PayMoney}"
+                ControlStoryboardOption="Play" />
+        </b:DataTrigger>
+    </b:Interaction.Triggers>
+    <materialDesign:DialogHost
+        CloseOnClickAway="True"
+        Style="{DynamicResource MaterialDesignEmbeddedDialogHost}"
+        DialogBackground="White"
+        DialogTheme="Inherit"
+        DialogMargin="10">
+        <Grid
+            Background="DarkGray">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="100px" />
+                <RowDefinition
+                    Height="*" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <Border
+                Background="DimGray">
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+                    <TextBlock
+                        FontSize="40"
+                        Text="Пункт размена"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center" />
+                </StackPanel>
+            </Border>
+            <Grid
+                ClipToBounds="False"
+                Grid.Row="1"
+                Margin="45"
+                Background="DimGray">
+                <Border
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    Padding="5">
+                    <StackPanel
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Orientation="Vertical">
+                        <Grid
+                            Margin="10"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                            <Rectangle
+                                Width="250"
+                                Height="40"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stroke="Black"
+                                StrokeThickness="2"
+                                Fill="Green" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                FontFamily="Consolas"
+                                Margin="5 0 0 0"
+                                FontSize="15"
+                                Text="{Binding MessageText}" />
+                        </Grid>
+                        <Grid
+                            VerticalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*" />
+                                <ColumnDefinition
+                                    Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <DockPanel
+                                Grid.Column="0"
+                                LastChildFill="False">
+                                <StackPanel
+                                    DockPanel.Dock="Top"
+                                    Orientation="Horizontal">
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        Style="{DynamicResource RoundButtonStyle}"
+                                        Background="Blue" 
+                                        Command="{s:Action ChangeNominal}"/>
+                                    <TextBlock
+                                        Text="Сменить номинал"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center" />
+                                </StackPanel>
+                                <StackPanel
+                                    DockPanel.Dock="Top"
+                                    Orientation="Horizontal">
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        Style="{DynamicResource RoundButtonStyle}"
+                                        Background="Green" 
+                                        Command="{s:Action Process}"/>
+                                    <TextBlock
+                                        Text="Обменять"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center" />
+                                </StackPanel>
+                                <StackPanel
+                                    DockPanel.Dock="Top"
+                                    Orientation="Horizontal">
+                                    <Button
+                                        Width="20"
+                                        Height="20"
+                                        Style="{DynamicResource RoundButtonStyle}"
+                                        Background="Red" 
+                                        Command="{s:Action Cancel}"/>
+                                    <TextBlock
+                                        Text="Отмена"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </DockPanel>
+                            <Grid
+                                Grid.Column="1">
+                                <Rectangle
+                                    Fill="DimGray"
+                                    Stretch="Fill"
+                                    Width="150"
+                                    Height="100"
+                                    Panel.ZIndex="999"
+                                    VerticalAlignment="Top" />
+                                <StackPanel
+                                    Margin="0 97 0 0"
+                                    Orientation="Horizontal"
+                                    ClipToBounds="False">
+                                    <Grid
+                                        Height="50"
+                                        Width="100"
+                                        Margin="0 -4 0 0">
+                                        <Rectangle
+                                            Margin="0 0 0 -3"
+                                            Height="50"
+                                            Width="100"
+                                            Fill="Gray"
+                                            StrokeThickness="2"
+                                            Stroke="Black" />
+                                        <Rectangle
+                                            Margin="0 -2 0 0"
+                                            Height="6"
+                                            Width="100"
+                                            Fill="Black"
+                                            Stroke="Transparent"
+                                            VerticalAlignment="Top"
+                                            Panel.ZIndex="998" />
+                                        <Rectangle
+                                            Margin="2 2 2 0"
+                                            Height="25"
+                                            Width="100"
+                                            Fill="Gray"
+                                            Stroke="Transparent"
+                                            VerticalAlignment="Top"
+                                            Panel.ZIndex="998" />
+                                        <Button
+                                            Height="10"
+                                            Width="80"
+                                            Background="Black"
+                                            Command="{s:Action TakeCash}"
+                                            Panel.ZIndex="999">
+                                            <Button.CommandParameter>
+                                                <system:Boolean>True</system:Boolean>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Border
+                                            x:Name="BillImageBorder"
+                                            Panel.ZIndex="100">
+                                            <Image
+                                                x:Name="BillImage"
+                                                Source="{Binding BillImageSource, Mode=OneWay}"
+                                                Opacity="0"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Stretch="Fill"
+                                                RenderTransformOrigin=".5,.5"
+                                                Panel.ZIndex="100">
+                                            </Image>
+                                            <Border.RenderTransform>
+                                                <TransformGroup>
+                                                    <TranslateTransform
+                                                        X="0"
+                                                        Y="0" />
+                                                    <RotateTransform
+                                                        CenterX="30"
+                                                        CenterY="45"
+                                                        Angle="90" />
+                                                </TransformGroup>
+                                            </Border.RenderTransform>
+                                        </Border>
+                                    </Grid>
+                                    <Grid
+                                        Margin="5">
+                                        <Rectangle
+                                            Height="50"
+                                            Width="30"
+                                            Fill="Gray"
+                                            Stroke="Black"
+                                            StrokeThickness="2" />
+                                        <Button
+                                            Height="25"
+                                            Width="7"
+                                            Background="Black"
+                                            Command="{s:Action TakeCash}"
+                                            Panel.ZIndex="999">
+                                            <Button.CommandParameter>
+                                                <system:Boolean>False</system:Boolean>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Rectangle
+                                            x:Name="MoneyRectangle"
+                                            Height="14"
+                                            Width="4"
+                                            Fill="Gold"
+                                            Opacity="0">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <TranslateTransform
+                                                        X="0"
+                                                        Y="20" />
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid
+                Grid.Row="2"
+                Margin="45 0"
+                Background="DimGray"
+                Height="100"
+                VerticalAlignment="Top">
+                <Border
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    Padding="0">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <Rectangle
+                            Width="150"
+                            Height="50"
+                            Margin="25 20"
+                            Fill="Black"
+                            Stroke="Black"
+                            StrokeThickness="2" />
+                        <Rectangle
+                            Width="50"
+                            Height="50"
+                            Margin="25 20"
+                            Fill="Black"
+                            Stroke="Black"
+                            StrokeThickness="2" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>

@@ -12,7 +12,51 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\currency-usd.png" />
+    <None Remove="Resources\10r.jpg" />
+    <Resource Include="Resources\10r.jpg" />
+    <None Remove="Resources\50r.jpg" />
+    <Resource Include="Resources\50r.jpg" />
+    <None Remove="Resources\100r.jpg" />
+    <Resource Include="Resources\100r.jpg" />
+    <None Remove="Resources\200r.jpg" />
+    <Resource Include="Resources\200r.jpg" />
+    <None Remove="Resources\500r.jpg" />
+    <Resource Include="Resources\500r.jpg" />
+    <None Remove="Resources\1000r.jpg" />
+    <Resource Include="Resources\1000r.jpg" />
+    <None Remove="Resources\2000r.jpg" />
+    <Resource Include="Resources\2000r.jpg" />
+    <None Remove="Resources\5000r.jpg" />
+    <Resource Include="Resources\5000r.jpg" />
+    <None Remove="Resources\rouble_spin.gif" />
+    <Resource Include="Resources\rouble_spin.gif" />
+    <None Remove="Resources\1r.gif" />
+    <Resource Include="Resources\1r.gif" />
+    <None Remove="Resources\1r.png" />
+    <Resource Include="Resources\1r.png" />
+    <None Remove="Resources\2r.gif" />
+    <Resource Include="Resources\2r.gif" />
+    <None Remove="Resources\5r.gif" />
+    <Resource Include="Resources\5r.gif" />
+    <None Remove="Resources\10r.gif" />
+    <Resource Include="Resources\10r.gif" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Stylet" Version="1.3.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\MainWindowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SetMoneyDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>
