@@ -29,17 +29,17 @@
     <None Remove="Resources\5000r.jpg" />
     <Resource Include="Resources\5000r.jpg" />
     <None Remove="Resources\rouble_spin.gif" />
-    <Resource Include="Resources\rouble_spin.gif" />
     <None Remove="Resources\1r.gif" />
     <Resource Include="Resources\1r.gif" />
     <None Remove="Resources\1r.png" />
-    <Resource Include="Resources\1r.png" />
     <None Remove="Resources\2r.gif" />
     <Resource Include="Resources\2r.gif" />
     <None Remove="Resources\5r.gif" />
     <Resource Include="Resources\5r.gif" />
     <None Remove="Resources\10r.gif" />
     <Resource Include="Resources\10r.gif" />
+    <None Remove="Resources\5r.jpg" />
+    <Resource Include="Resources\5r.jpg" />
   </ItemGroup>
 
   <ItemGroup>

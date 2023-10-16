@@ -315,20 +315,69 @@
                     Padding="0">
                     <StackPanel
                         Orientation="Horizontal">
-                        <Rectangle
-                            Width="150"
-                            Height="50"
-                            Margin="25 20"
-                            Fill="Black"
-                            Stroke="Black"
-                            StrokeThickness="2" />
-                        <Rectangle
-                            Width="50"
-                            Height="50"
-                            Margin="25 20"
-                            Fill="Black"
-                            Stroke="Black"
-                            StrokeThickness="2" />
+                        <Grid>
+                            <Rectangle
+                                Width="150"
+                                Height="50"
+                                Margin="25 20"
+                                Fill="Black"
+                                Stroke="Black"
+                                StrokeThickness="2" />
+                            <Grid>
+                                <Border
+                                    Width="100"
+                                    Height="40">
+                                    <Image
+                                        Source="{Binding BillImageSource, Mode=OneWay}"
+                                        Opacity="{Binding CashOpacity}"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Stretch="Fill"
+                                        RenderTransformOrigin=".5,.5">
+                                    </Image>
+                                    <Border.RenderTransform>
+                                        <TransformGroup>
+                                            <TranslateTransform
+                                                X="0"
+                                                Y="0" />
+                                        </TransformGroup>
+                                    </Border.RenderTransform>
+                                </Border>
+                                <Button
+                                    Panel.ZIndex="999"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    Command="{s:Action ShowList}"/>
+                            </Grid>
+                        </Grid>
+                        <Grid>
+                            <Rectangle
+                                Width="50"
+                                Height="50"
+                                Margin="25 20"
+                                Fill="Black"
+                                Stroke="Black"
+                                StrokeThickness="2" />
+                            <Grid>
+                                <Rectangle
+                                    Height="14"
+                                    Width="4"
+                                    Fill="Gold"
+                                    Opacity="{Binding MoneyOpacity}">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <TranslateTransform
+                                                X="0"
+                                                Y="0" />
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                                <Button
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    Command="{s:Action ShowList}"/>
+                            </Grid>
+                        </Grid>
                     </StackPanel>
                 </Border>
             </Grid>

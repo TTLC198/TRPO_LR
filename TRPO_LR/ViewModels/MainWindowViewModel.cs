@@ -21,8 +21,40 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private readonly IViewModelFactory _viewModelFactory;
 
     public ObservableCollection<Cash> Cashes = new ObservableCollection<Cash>();
+    
+    public ObservableCollection<Cash> CashesAfterExchange = new ObservableCollection<Cash>();
 
     public Nominals CurrentMinimalNominal { get; set; } = Enum.GetValues<Nominals>().First();
+
+    public int CashOpacity
+    {
+        get
+        {
+            return _cashOpacity;
+        }
+        set
+        {
+            _cashOpacity = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private int _cashOpacity = 0;
+    
+    public int MoneyOpacity
+    {
+        get
+        {
+            return _moneyOpacity;
+        }
+        set
+        {
+            _moneyOpacity = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private int _moneyOpacity = 0;
     
     public bool StartBillAnimation
     {
@@ -108,21 +140,24 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 : _viewModelFactory.CreateSetMoneyViewModel();
         
         var cash = await _dialogManager.ShowDialogAsync(viewModel);
-        
-        await Task.Delay(500);
-        if (isBill)
+
+        if (cash is not null)
         {
-            BillImageSource = new BitmapImage(
-                new Uri(@$"pack://application:,,,/TRPO_LR;component/Resources/{cash.value}r.jpg",
-                    UriKind.Absolute));
-            StartBillAnimation = true;
-        }
-        else
-            StartMoneyAnimation = true;
-        await Task.Delay(2000);
+            await Task.Delay(500);
+            if (isBill)
+            {
+                BillImageSource = new BitmapImage(
+                    new Uri(@$"pack://application:,,,/TRPO_LR;component/Resources/{cash.value}r.jpg",
+                        UriKind.Absolute));
+                StartBillAnimation = true;
+            }
+            else
+                StartMoneyAnimation = true;
+            await Task.Delay(2000);
         
-        StartBillAnimation = false;
-        StartMoneyAnimation = false;
+            StartBillAnimation = false;
+            StartMoneyAnimation = false;
+        } 
         
         if (cash is null or {isOriginal: false})
         {
@@ -155,8 +190,6 @@ public class MainWindowViewModel : INotifyPropertyChanged
             CurrentState = MachineStates.NeedMoney;
             return;
         }
-
-        var cashesAfterExchange = new List<Cash>();
         
         foreach (var denomination in Enum.GetValues<Nominals>()
                      .OrderByDescending(n => n)
@@ -168,9 +201,10 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 int count = CurrentBalance / denomination;
                 for (int i = 0; i < count; i++)
                 {
-                    cashesAfterExchange.Add(new Cash()
+                    CashesAfterExchange.Add(new Cash()
                     {
                         value = denomination,
+                        isBill = denomination >= 50,
                         isOriginal = true
                     });
                 }
@@ -179,16 +213,36 @@ public class MainWindowViewModel : INotifyPropertyChanged
         }
         Cashes.Clear();
 
+        if (CashesAfterExchange.Any(c => c.isBill))
+        {
+            CashOpacity = 1;
+            var cashValue = CashesAfterExchange.Max(c => c.value);
+            BillImageSource = new BitmapImage(
+                new Uri(@$"pack://application:,,,/TRPO_LR;component/Resources/{cashValue}r.jpg",
+                    UriKind.Absolute));
+        }
+        if (CashesAfterExchange.Any(c => !c.isBill))
+        {
+            MoneyOpacity = 1;
+        }
+    }
+
+    public async void ShowList()
+    {
+        CashOpacity = 0;
+        MoneyOpacity = 0;
+        
         var msg = new StringBuilder();
 
         foreach (var nominal in Enum.GetValues<Nominals>())
         {
-            var count = cashesAfterExchange.Count(c => c.value == (int) nominal);
+            var count = CashesAfterExchange.Count(c => c.value == (int) nominal);
             msg.AppendLine($"{nominal.GetDisplayName()} - {count} шт.");
         }
         
         CurrentBalance = 0;
         CurrentState = MachineStates.Output;
+        CashesAfterExchange.Clear();
         
         var messageBoxDialog = _viewModelFactory.CreateMessageBoxViewModel(
             title: "Вам выданы разменянные деньги:",
