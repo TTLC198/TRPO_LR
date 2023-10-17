@@ -50,7 +50,51 @@
                 Storyboard.TargetName="MoneyRectangle"
                 From="20"
                 To="0"
+                Duration="0:0:1.5" />
+        </Storyboard>
+        <Storyboard x:Key="ChangeBill">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(Image.Opacity)"
+                Storyboard.TargetName="ChangeBillImage"
+                From="0"
+                To="1"
+                Duration="0:0:0.001" />
+            <DoubleAnimation
+                Storyboard.TargetProperty="RenderTransform.Children[0].Y"
+                Storyboard.TargetName="ChangeBillBorder"
+                From="-30"
+                To="0"
+                Duration="0:0:1.5" />
+        </Storyboard>
+        <Storyboard x:Key="ChangeMoney">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(Rectangle.Opacity)"
+                Storyboard.TargetName="ChangeMoney"
+                From="0"
+                To="1"
+                Duration="0:0:0.001" />
+            <DoubleAnimation
+                Storyboard.TargetProperty="RenderTransform.Children[0].Y"
+                Storyboard.TargetName="ChangeMoney"
+                From="-35"
+                To="0"
                 Duration="0:0:2.5" />
+        </Storyboard>
+        <Storyboard x:Key="RemoveChangedBill">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(Image.Opacity)"
+                Storyboard.TargetName="ChangeBillImage"
+                From="1"
+                To="0"
+                Duration="0:0:0.001" />
+        </Storyboard>
+        <Storyboard x:Key="RemoveChangedMoney">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(Rectangle.Opacity)"
+                Storyboard.TargetName="ChangeMoney"
+                From="1"
+                To="0"
+                Duration="0:0:0.001" />
         </Storyboard>
     </Window.Resources>
     <b:Interaction.Triggers>
@@ -70,6 +114,38 @@
                 Storyboard="{StaticResource PayMoney}"
                 ControlStoryboardOption="Play" />
         </b:DataTrigger>
+        <b:DataTrigger Binding="{Binding StartChangeBillAnimation, Mode=OneWay}">
+            <b:DataTrigger.Value>
+                <system:Boolean>True</system:Boolean>
+            </b:DataTrigger.Value>
+            <b:ControlStoryboardAction
+                Storyboard="{StaticResource ChangeBill}"
+                ControlStoryboardOption="Play" />
+        </b:DataTrigger>
+        <b:DataTrigger Binding="{Binding StartChangeMoneyAnimation, Mode=OneWay}">
+            <b:DataTrigger.Value>
+                <system:Boolean>True</system:Boolean>
+            </b:DataTrigger.Value>
+            <b:ControlStoryboardAction
+                Storyboard="{StaticResource ChangeMoney}"
+                ControlStoryboardOption="Play" />
+        </b:DataTrigger>
+        <b:DataTrigger Binding="{Binding StartChangeBillAnimation, Mode=OneWay}">
+            <b:DataTrigger.Value>
+                <system:Boolean>False</system:Boolean>
+            </b:DataTrigger.Value>
+            <b:ControlStoryboardAction
+                Storyboard="{StaticResource RemoveChangedBill}"
+                ControlStoryboardOption="Play" />
+        </b:DataTrigger>
+        <b:DataTrigger Binding="{Binding StartChangeMoneyAnimation, Mode=OneWay}">
+            <b:DataTrigger.Value>
+                <system:Boolean>False</system:Boolean>
+            </b:DataTrigger.Value>
+            <b:ControlStoryboardAction
+                Storyboard="{StaticResource RemoveChangedMoney}"
+                ControlStoryboardOption="Play" />
+        </b:DataTrigger>
     </b:Interaction.Triggers>
     <materialDesign:DialogHost
         CloseOnClickAway="True"
@@ -78,33 +154,46 @@
         DialogTheme="Inherit"
         DialogMargin="10">
         <Grid
-            Background="DarkGray">
+            Background="#9CCD3D">
             <Grid.RowDefinitions>
                 <RowDefinition
                     Height="100px" />
                 <RowDefinition
-                    Height="*" />
+                    Height="Auto" />
                 <RowDefinition
-                    Height="*" />
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
             </Grid.RowDefinitions>
             <Border
-                Background="DimGray">
+                BorderThickness="0 0 0 2"
+                BorderBrush="Black"
+                Background="Green">
                 <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
+                    <Image
+                        Width="35"
+                        Source="../Resources/icon.png"/>
                     <TextBlock
+                        Margin="25"
                         FontSize="40"
-                        Text="Пункт размена"
+                        Text="Р А З М Е Н"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         TextAlignment="Center" />
+                    <Image
+                        Width="35"
+                        Source="../Resources/icon.png"/>
                 </StackPanel>
             </Border>
             <Grid
                 ClipToBounds="False"
                 Grid.Row="1"
                 Margin="45"
-                Background="DimGray">
+                Height="250"
+                VerticalAlignment="Top"
+                Background="Green">
                 <Border
                     BorderBrush="Black"
                     BorderThickness="2"
@@ -124,7 +213,7 @@
                                 HorizontalAlignment="Center"
                                 Stroke="Black"
                                 StrokeThickness="2"
-                                Fill="Green" />
+                                Fill="LimeGreen" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
@@ -165,7 +254,7 @@
                                         Width="20"
                                         Height="20"
                                         Style="{DynamicResource RoundButtonStyle}"
-                                        Background="Green" 
+                                        Background="LimeGreen" 
                                         Command="{s:Action Process}"/>
                                     <TextBlock
                                         Text="Обменять"
@@ -190,7 +279,7 @@
                             <Grid
                                 Grid.Column="1">
                                 <Rectangle
-                                    Fill="DimGray"
+                                    Fill="Green"
                                     Stretch="Fill"
                                     Width="150"
                                     Height="100"
@@ -208,7 +297,7 @@
                                             Margin="0 0 0 -3"
                                             Height="50"
                                             Width="100"
-                                            Fill="Gray"
+                                            Fill="#9CCD3D"
                                             StrokeThickness="2"
                                             Stroke="Black" />
                                         <Rectangle
@@ -223,7 +312,7 @@
                                             Margin="2 2 2 0"
                                             Height="25"
                                             Width="100"
-                                            Fill="Gray"
+                                            Fill="#9CCD3D"
                                             Stroke="Transparent"
                                             VerticalAlignment="Top"
                                             Panel.ZIndex="998" />
@@ -268,7 +357,7 @@
                                         <Rectangle
                                             Height="50"
                                             Width="30"
-                                            Fill="Gray"
+                                            Fill="#9CCD3D"
                                             Stroke="Black"
                                             StrokeThickness="2" />
                                         <Button
@@ -302,20 +391,26 @@
                     </StackPanel>
                 </Border>
             </Grid>
-
             <Grid
                 Grid.Row="2"
                 Margin="45 0"
-                Background="DimGray"
+                Background="Green"
                 Height="100"
-                VerticalAlignment="Top">
+                VerticalAlignment="Bottom">
+                <Rectangle
+                    Fill="Green"
+                    Height="20"
+                    Margin="2 2 2 -2"
+                    VerticalAlignment="Top"
+                    Panel.ZIndex="999"/>
                 <Border
                     BorderBrush="Black"
                     BorderThickness="2"
                     Padding="0">
                     <StackPanel
                         Orientation="Horizontal">
-                        <Grid>
+                        <Grid
+                            Margin="0 -6 0 0">
                             <Rectangle
                                 Width="150"
                                 Height="50"
@@ -325,11 +420,13 @@
                                 StrokeThickness="2" />
                             <Grid>
                                 <Border
+                                    x:Name="ChangeBillBorder"
                                     Width="100"
                                     Height="40">
                                     <Image
+                                        x:Name="ChangeBillImage"
                                         Source="{Binding BillImageSource, Mode=OneWay}"
-                                        Opacity="{Binding CashOpacity}"
+                                        Opacity="0"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         Stretch="Fill"
@@ -339,7 +436,7 @@
                                         <TransformGroup>
                                             <TranslateTransform
                                                 X="0"
-                                                Y="0" />
+                                                Y="-30" />
                                         </TransformGroup>
                                     </Border.RenderTransform>
                                 </Border>
@@ -350,7 +447,8 @@
                                     Command="{s:Action ShowList}"/>
                             </Grid>
                         </Grid>
-                        <Grid>
+                        <Grid
+                            Margin="0 -6 0 0">
                             <Rectangle
                                 Width="50"
                                 Height="50"
@@ -360,15 +458,16 @@
                                 StrokeThickness="2" />
                             <Grid>
                                 <Rectangle
+                                    x:Name="ChangeMoney"
                                     Height="14"
                                     Width="4"
                                     Fill="Gold"
-                                    Opacity="{Binding MoneyOpacity}">
+                                    Opacity="0">
                                     <Rectangle.RenderTransform>
                                         <TransformGroup>
                                             <TranslateTransform
                                                 X="0"
-                                                Y="0" />
+                                                Y="-35" />
                                         </TransformGroup>
                                     </Rectangle.RenderTransform>
                                 </Rectangle>
@@ -381,6 +480,12 @@
                     </StackPanel>
                 </Border>
             </Grid>
+            <Image
+                VerticalAlignment="Top"
+                Margin="48 0"
+                Height="200"
+                Grid.Row="3"
+                Source="../Resources/poster.jpg"/>
         </Grid>
     </materialDesign:DialogHost>
 </Window>

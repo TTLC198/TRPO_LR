@@ -25,41 +25,11 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public ObservableCollection<Cash> CashesAfterExchange = new ObservableCollection<Cash>();
 
     public Nominals CurrentMinimalNominal { get; set; } = Enum.GetValues<Nominals>().First();
-
-    public int CashOpacity
-    {
-        get
-        {
-            return _cashOpacity;
-        }
-        set
-        {
-            _cashOpacity = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private int _cashOpacity = 0;
-    
-    public int MoneyOpacity
-    {
-        get
-        {
-            return _moneyOpacity;
-        }
-        set
-        {
-            _moneyOpacity = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private int _moneyOpacity = 0;
     
     public bool StartBillAnimation
     {
         get => _startBillAnimation;
-        set
+        private set
         {
             _startBillAnimation = value;
             OnPropertyChanged();
@@ -71,7 +41,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public bool StartMoneyAnimation
     {
         get => _startMoneyAnimation;
-        set
+        private set
         {
             _startMoneyAnimation = value;
             OnPropertyChanged();
@@ -79,6 +49,31 @@ public class MainWindowViewModel : INotifyPropertyChanged
     }
 
     private bool _startBillAnimation;
+    
+    
+    private bool _startChangeBillAnimation;
+    
+    public bool StartChangeBillAnimation
+    {
+        get => _startChangeBillAnimation;
+        private set
+        {
+            _startChangeBillAnimation = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _startChangeMoneyAnimation;
+    
+    public bool StartChangeMoneyAnimation
+    {
+        get => _startChangeMoneyAnimation;
+        private set
+        {
+            _startChangeMoneyAnimation = value;
+            OnPropertyChanged();
+        }
+    }
     
     public int CurrentBalance { get; set; }
 
@@ -215,22 +210,23 @@ public class MainWindowViewModel : INotifyPropertyChanged
 
         if (CashesAfterExchange.Any(c => c.isBill))
         {
-            CashOpacity = 1;
+            StartChangeBillAnimation = true;
             var cashValue = CashesAfterExchange.Max(c => c.value);
             BillImageSource = new BitmapImage(
                 new Uri(@$"pack://application:,,,/TRPO_LR;component/Resources/{cashValue}r.jpg",
                     UriKind.Absolute));
         }
+        
         if (CashesAfterExchange.Any(c => !c.isBill))
         {
-            MoneyOpacity = 1;
+            StartChangeMoneyAnimation = true;
         }
     }
 
     public async void ShowList()
     {
-        CashOpacity = 0;
-        MoneyOpacity = 0;
+        StartChangeBillAnimation = false;
+        StartChangeMoneyAnimation = false;
         
         var msg = new StringBuilder();
 

@@ -40,6 +40,10 @@
     <Resource Include="Resources\10r.gif" />
     <None Remove="Resources\5r.jpg" />
     <Resource Include="Resources\5r.jpg" />
+    <None Remove="Resources\icon.png" />
+    <Resource Include="Resources\icon.png" />
+    <None Remove="Resources\poster.jpg" />
+    <Resource Include="Resources\poster.jpg" />
   </ItemGroup>
 
   <ItemGroup>
